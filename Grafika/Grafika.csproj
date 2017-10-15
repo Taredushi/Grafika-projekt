@@ -103,6 +103,7 @@
     <Compile Include="Geometry\TemporaryGeometry.cs" />
     <Compile Include="Helpers\FindPointCloseToPosition.cs" />
     <Compile Include="Helpers\GetSegmentLength.cs" />
+    <Compile Include="Helpers\PointInsidePolygon.cs" />
     <Compile Include="Interfaces\IGeometry.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -143,9 +144,7 @@
       <Version>1.21.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Layers\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -6,10 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xaml="using:Microsoft.Graphics.Canvas.UI.Xaml"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Loaded="MainPage_OnLoaded" Unloaded="MainPage_OnUnloaded">
 
     <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -18,7 +19,12 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <CommandBar x:Name="TopToolbarMenu" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Left" HorizontalAlignment="Left"
+        <CommandBar x:Name="TopToolbarMenu" 
+                    Grid.Row="1" 
+                    Grid.Column="0" 
+                    Grid.ColumnSpan="2" 
+                    HorizontalContentAlignment="Left" 
+                    HorizontalAlignment="Left"
                     Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
             
             <AppBarToggleButton x:Name="MoveButton"  Label="Przesuń" Checked="MoveButton_OnChecked">
@@ -26,7 +32,12 @@
                       Data="F1 M 25,36L 36,36L 36,25L 31,25L 38,18L 45,25L 40,25L 40,36L 51,36L 51,31L 58,38L 51,
                       45L 51,40L 40,40L 40,51L 45,51L 38,58L 31,51L 36,51L 36,40L 25,40L 25,45L 18,38L 25,31L 25,36 Z "/>
             </AppBarToggleButton>
-
+            <AppBarToggleButton x:Name="ResizeButton"  Label="Zmień rozmiar" Checked="ResizeButton_OnChecked">
+                <Path Width="20" Height="20" Stretch="Uniform" Fill="{ThemeResource ApplicationForegroundThemeBrush}"
+                      Data="F1 M 30.25,58L 18,58L 18,45.75L 22,41.75L 22,50.75L 30,42.75L 33.25,46L 25.25,54L 34.25,54L 30.25,58 Z M 58,45.75L 58,58L 45.75,58L 41.75,54L 50.75,54L 42.75,
+                      46L 46,42.75L 54,50.75L 54,41.75L 58,45.75 Z M 45.75,18L 58,18L 58,30.25L 54,34.25L 54,25.25L 46,33.25L 42.75,30L 50.75,22L 41.75,22L 45.75,18 Z M 18,30.25L 18,
+                      18L 30.25,18L 34.25,22L 25.25,22L 33.25,30L 30,33.25L 22,25.25L 22,34.25L 18,30.25 Z "/>
+            </AppBarToggleButton>
             <AppBarSeparator/>
 
             <AppBarToggleButton x:Name="LineButton"  Label="Linia"  Checked="LineButton_OnChecked">
@@ -50,6 +61,18 @@
             </AppBarToggleButton>
         </CommandBar>
 
+        <StackPanel x:Name="GeometrySizePanel" 
+                    Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="2">
+            <TextBlock Text="Wysokość: " Margin="5" VerticalAlignment="Center"/>
+            <TextBox x:Name="GeometryHeight" Margin="5"/>
+            <TextBlock Text="Szerokość: " Margin="5" VerticalAlignment="Center"/>
+            <TextBox x:Name="GeometryWidth" Margin="5"/>
+            <Button x:Name="AssignSizeButton" Margin="50,5" Content="OK" Width="100" Click="AssignSizeButton_OnClick"></Button>
+        </StackPanel>
+        
         <!-- MAP -->
         <ScrollViewer x:Name="MapScrollViewer"
                       VerticalScrollBarVisibility="Hidden"
@@ -57,21 +80,28 @@
                       ZoomMode="Enabled"
                       MinZoomFactor="0.1"
                       MaxZoomFactor="20"
+                      ManipulationMode="TranslateX, TranslateY"
+                      ViewChanged="ScrollViewer_ViewChanged" 
                       PointerPressed="MapScrollViewer_OnPointerPressed"
                       PointerMoved="MapScrollViewer_OnPointerMoved"
                       PointerCanceled="MapScrollViewer_OnPointerCanceled"
                       PointerReleased="MapScrollViewer_OnPointerCanceled"
                       PointerCaptureLost="MapScrollViewer_OnPointerCanceled"
-                      ManipulationMode="TranslateX, TranslateY"
                       HorizontalScrollMode="Disabled"
                       VerticalScrollMode="Disabled"
                       Background="#FF292525"
-                      Grid.Row="2"
+                      Grid.Row="3"
                       Grid.Column="0"
                       Grid.ColumnSpan="2">
 
             <Grid HorizontalAlignment="Stretch">
-                <xaml:CanvasVirtualControl x:Name="MapCanvas" RegionsInvalidated="MapCanvas_OnRegionsInvalidated" PointerMoved="PositionCanvas_OnPointerMoved">
+                <xaml:CanvasVirtualControl x:Name="MapCanvas" 
+                                           Width="10000"
+                                           Height="10000"
+                                           IsTabStop="true"
+                                           ClearColor="#FF292525" 
+                                           RegionsInvalidated="MapCanvas_OnRegionsInvalidated" 
+                                           PointerMoved="PositionCanvas_OnPointerMoved">
                 </xaml:CanvasVirtualControl>
             </Grid>
         </ScrollViewer>

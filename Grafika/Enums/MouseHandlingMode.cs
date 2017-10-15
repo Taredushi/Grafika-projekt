@@ -8,9 +8,12 @@ namespace Grafika.Enums
 {
     public enum MouseHandlingMode
     {
+        None,
         Move,
         Line,
         Rectangle,
-        Circle
+        Circle,
+        Panning,
+        Resize
     }
 }

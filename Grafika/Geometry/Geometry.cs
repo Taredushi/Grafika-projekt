@@ -19,6 +19,13 @@ namespace Grafika.Geometry
         public List<Point> Points { get; set; }
 
         private int _lockedPoint;
+        private bool _drawHighlightPoint;
+        private int _highlightPointIndex;
+
+        public Geometry()
+        {
+            MapController.Instance.PropertyChanged += MapController_PropertyChanged;
+        }
 
         #region Cached Geometry
 
@@ -26,11 +33,19 @@ namespace Grafika.Geometry
         private bool _rebuildGeometry;
         #endregion
 
-
+        #region Draw
         public void Draw(CanvasDrawingSession session, CanvasVirtualControl device)
         {
             DrawBorderGeometry(session, device);
             DrawPoints(session);
+            DrawHighlightPoint(session);
+        }
+
+        private void DrawHighlightPoint(CanvasDrawingSession session)
+        {
+            if (!_drawHighlightPoint) return;
+            float size = GetPointHighlightSize();
+            session.DrawCircle((float)Points[_highlightPointIndex].X, (float)Points[_highlightPointIndex].Y, MapController.Instance.PointSize * 2f, Colors.LawnGreen, size);
         }
 
         private void DrawBorderGeometry(CanvasDrawingSession session, CanvasVirtualControl device)
@@ -47,17 +62,19 @@ namespace Grafika.Geometry
 
         private void DrawPoints(CanvasDrawingSession session)
         {
+            if (!MapController.Instance.DrawPoints) return;
             if (Points == null || Points.Count == 0) return;
-            if (GeometryType == GeometryType.Circle) return;
             foreach (var point in Points)
             {
                 var x = point.X - (MapController.Instance.PointSize / 2);
-                var y = -point.Y - (MapController.Instance.PointSize / 2);
+                var y = point.Y - (MapController.Instance.PointSize / 2);
 
-                session.FillRectangle(new Rect(new Point(x, y), new Size(MapController.Instance.PointSize, MapController.Instance.PointSize)), Colors.WhiteSmoke);
+                session.FillRectangle(new Rect(new Point(x, y), new Size(MapController.Instance.PointSize, MapController.Instance.PointSize)), Colors.Yellow);
             }
         }
+        #endregion
 
+        #region CreateGeometry
         private void CreateCanvasGeometry(CanvasVirtualControl device)
         {
             switch (GeometryType)
@@ -80,6 +97,25 @@ namespace Grafika.Geometry
             }
         }
 
+        private float GetPointHighlightSize()
+        {
+            if (MapController.Instance.Zoom > 10)
+            {
+                return 0.5f;
+            }
+            if (MapController.Instance.Zoom > 5)
+            {
+                return 1f;
+            }
+            if (MapController.Instance.Zoom > 1)
+            {
+                return 1.5f;
+            }
+            return 2f;
+        }
+        #endregion
+
+        #region Actions
         public bool LockPointToMove(Point point)
         {
             _lockedPoint = -1;
@@ -94,5 +130,74 @@ namespace Grafika.Geometry
             _lockedPoint = -1;
         }
 
+        public void SetPointFromSize(double width, double height)
+        {
+            Points[1] = new Point(Points[0].X + width, Points[0].Y + height);
+            _rebuildGeometry = true;
+            MapController.Instance.RerenderMap();
+        }
+
+        public bool IsPointInside(Point point)
+        {
+            return _geometry.FillContainsPoint(new Vector2((float) point.X, (float) point.Y));
+        }
+
+        public void Move(Point offset)
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Points[i]=new Point(Points[i].X + offset.X, Points[i].Y + offset.Y);
+            }
+            _rebuildGeometry = true;
+            MapController.Instance.RerenderMap();
+        }
+        #endregion
+
+        #region Highlighting
+
+        private void CheckIfHighlightPoint()
+        {
+            bool pointfound = false;
+            for (int i = 0; i < Points.Count; i++)
+            {
+                var x = Points[i].X - MapController.Instance.PointSize;
+                var y = Points[i].Y - MapController.Instance.PointSize;
+
+                var rect = new Rect(new Point(x, y),
+                    new Size(MapController.Instance.PointSize * 1.5f, MapController.Instance.PointSize * 1.5f));
+
+                if (!rect.Contains(MapController.Instance.MousePosition)) continue;
+
+                _highlightPointIndex = i;
+                _drawHighlightPoint = true;
+                pointfound = true;
+                break;
+            }
+
+            if (pointfound)
+            {
+                MapController.Instance.RerenderMap();
+                return;
+            }
+            if (!_drawHighlightPoint) return;
+            _drawHighlightPoint = false;
+            MapController.Instance.RerenderMap();
+        }
+        #endregion
+
+        #region MapController PropertyChanged
+        private void MapController_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+            if (e.PropertyName.Equals("MousePosition"))
+            {
+                CheckIfHighlightPoint();
+                if (_lockedPoint == -1) return;
+                Points[_lockedPoint] = MapController.Instance.MousePosition;
+                _rebuildGeometry = true;
+                MapController.Instance.RerenderMap();
+            }
+        }
+        #endregion
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -17,7 +19,9 @@ namespace Grafika.Drawing
         public Rect BoundingBox { get; private set; }
         public List<IGeometry> Geometrys { get; }
 
-        private TemporaryGeometry _temporaryGeometry;
+        public TemporaryGeometry TemporaryGeometry { get; private set; }
+
+        private IGeometry _lockedGeometry;
 
         public Map()
         {
@@ -30,31 +34,83 @@ namespace Grafika.Drawing
 
         public void CreateGeometry(Point point, GeometryType type)
         {
-            if (_temporaryGeometry == null)
+            if (TemporaryGeometry == null)
             {
-                _temporaryGeometry = new TemporaryGeometry(point, type);
+                TemporaryGeometry = new TemporaryGeometry(point, type);
             }
             else
             {
-                _temporaryGeometry.Points.Add(point);
+                TemporaryGeometry = null;
+                TemporaryGeometry = new TemporaryGeometry(point, type);
+                TemporaryGeometry.Points.Add(point);
             }
         }
 
         public void TemporaryGeometry_End(Point point)
         {
-            if (_temporaryGeometry == null) return;
-            _temporaryGeometry.Points.Add(point);
+            if (TemporaryGeometry == null) return;
+            TemporaryGeometry.Points.Add(point);
 
             var geo = new Geometry.Geometry()
             {
-                GeometryType = _temporaryGeometry.GeometryType,
-                Points = _temporaryGeometry.Points
+                GeometryType = TemporaryGeometry.GeometryType,
+                Points = TemporaryGeometry.Points
             };
             Geometrys.Add(geo);
-            _temporaryGeometry = null;
+            TemporaryGeometry = null;
         }
 
+        public void LastGeometry_ChangeSize(double width, double height)
+        {
+            if (Geometrys.Count == 0) return;
+            if (_lockedGeometry == null)
+            {
+                Geometrys[Geometrys.Count - 1].SetPointFromSize(width, height);
+            }
+            else
+            {
+                _lockedGeometry.SetPointFromSize(width, height);
+            }
+        }
         #endregion
+
+        public bool LockGeometry(Point point)
+        {
+            _lockedGeometry = null;
+            foreach (var geo in Geometrys)
+            {
+                if (geo.IsPointInside(point))
+                {
+                    _lockedGeometry = geo;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void MoveLockedGeometry(Point offset)
+        {
+            if (_lockedGeometry == null) return;
+            _lockedGeometry.Move(offset);
+        }
+
+        public void UnlockAll()
+        {
+            _lockedGeometry = null;
+            foreach (var geo in Geometrys)
+            {
+                geo.UnlockPointToMove();
+            }
+        }
+
+        public void LockPointToMove(Point point)
+        {
+            foreach (var geo in Geometrys)
+            {
+                var result = geo.LockPointToMove(point);
+                if (result) return;
+            }
+        }
 
         public void Draw(CanvasDrawingSession session, CanvasVirtualControl device)
         {
@@ -62,7 +118,7 @@ namespace Grafika.Drawing
             {
                 geo.Draw(session, device);
             }
-            _temporaryGeometry?.Draw(session, device);
+            TemporaryGeometry?.Draw(session, device);
         }
     }
 }

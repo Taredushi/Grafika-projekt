@@ -52,6 +52,7 @@ namespace Grafika.Drawing
 
         public event Action InvalidateMap = delegate { };
 
+        public bool DrawPoints { get; set; }
 
         public void RerenderMap()
         {
@@ -60,9 +61,13 @@ namespace Grafika.Drawing
 
         private void SetPointSize()
         {
-            if (_zoom < 4.5)
+            if (_zoom <= 1f)
             {
-                PointSize = 1.5f;
+                PointSize = 5f;
+            }
+            else if (_zoom < 4.5)
+            {
+                PointSize = 3f;
             }
             else if (_zoom < 10)
             {

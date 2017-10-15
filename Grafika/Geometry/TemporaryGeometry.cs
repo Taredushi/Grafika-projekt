@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls.Maps;
 using Grafika.Drawing;
 using Grafika.Enums;
 using Grafika.Helpers;
@@ -16,10 +19,11 @@ using Microsoft.Graphics.Canvas.UI.Xaml;
 
 namespace Grafika.Geometry
 {
-    public class TemporaryGeometry
+    public class TemporaryGeometry 
     {
         public List<Point> Points { get; private set; }
         public GeometryType GeometryType { get; private set; }
+
 
         public TemporaryGeometry(Point point, GeometryType type)
         {
@@ -44,12 +48,12 @@ namespace Grafika.Geometry
                     return CanvasGeometry.CreateRectangle(device, (float)Points[0].X, (float)Points[0].Y,
                         (float)MapController.Instance.MousePosition.X - (float)Points[0].X, (float)MapController.Instance.MousePosition.Y - (float)Points[0].Y);
                 case GeometryType.Line:
-                    return CanvasGeometry.CreatePolygon(device,
-                        new Vector2[]
-                        {
-                            new Vector2((float) Points[0].X, (float) Points[0].Y),
-                            new Vector2((float) MapController.Instance.MousePosition.X, (float) MapController.Instance.MousePosition.Y)
-                        });
+                    CanvasPathBuilder pathBuilder = new CanvasPathBuilder(device);
+                    pathBuilder.SetSegmentOptions(CanvasFigureSegmentOptions.ForceRoundLineJoin);
+                    pathBuilder.BeginFigure((float)Points[0].X, (float)Points[0].Y);
+                    pathBuilder.AddLine(new Vector2((float)MapController.Instance.MousePosition.X, (float)MapController.Instance.MousePosition.Y));
+                    pathBuilder.EndFigure(CanvasFigureLoop.Open);
+                    return CanvasGeometry.CreatePath(pathBuilder);
                 case GeometryType.Circle:
                     return CanvasGeometry.CreateCircle(device, new Vector2((float)Points[0].X, (float)Points[0].Y), GetSegmentLength.CalculateSegmentLength(Points[0], MapController.Instance.MousePosition));
             }
@@ -63,5 +67,7 @@ namespace Grafika.Geometry
                 MapController.Instance.RerenderMap();
             }
         }
+
+        
     }
 }

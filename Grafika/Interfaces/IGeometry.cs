@@ -18,5 +18,8 @@ namespace Grafika.Interfaces
         void Draw(CanvasDrawingSession session, CanvasVirtualControl device);
         bool LockPointToMove(Point point);
         void UnlockPointToMove();
+        void SetPointFromSize(double width, double height);
+        bool IsPointInside(Point point);
+        void Move(Point offset);
     }
 }
