@@ -125,6 +125,15 @@ namespace Grafika.Geometry
             return true;
         }
 
+        public bool Delete(Point point)
+        {
+            _lockedPoint = -1;
+            var index = FindPointCloseToPosition.FindPointIndex(point, Points);
+            if (index == -1) return false;
+            _lockedPoint = index;
+            return true;
+        }
+
         public void UnlockPointToMove()
         {
             _lockedPoint = -1;

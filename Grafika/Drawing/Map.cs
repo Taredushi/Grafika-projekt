@@ -6,9 +6,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
 using Grafika.Enums;
 using Grafika.Geometry;
 using Grafika.Interfaces;
+using Grafika.Ppm;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
@@ -22,6 +24,7 @@ namespace Grafika.Drawing
         public TemporaryGeometry TemporaryGeometry { get; private set; }
 
         private IGeometry _lockedGeometry;
+        private ImageGeometry _image;
 
         public Map()
         {
@@ -74,6 +77,7 @@ namespace Grafika.Drawing
         }
         #endregion
 
+        #region Action Geometry ex1
         public bool LockGeometry(Point point)
         {
             _lockedGeometry = null;
@@ -111,7 +115,25 @@ namespace Grafika.Drawing
                 if (result) return;
             }
         }
+        #endregion
 
+        #region Image
+
+        public void CreateImage(StorageFile file)
+        {
+            _image = new ImageGeometry(file);
+        }
+
+        public void CreateImage(PpmFile file)
+        {
+            _image = new ImageGeometry(file);
+        }
+
+        public void DeleteImage()
+        {
+            _image = null;
+        }
+        #endregion
         public void Draw(CanvasDrawingSession session, CanvasVirtualControl device)
         {
             foreach (var geo in Geometrys)
@@ -119,6 +141,7 @@ namespace Grafika.Drawing
                 geo.Draw(session, device);
             }
             TemporaryGeometry?.Draw(session, device);
+            _image?.Draw(session, device);
         }
     }
 }

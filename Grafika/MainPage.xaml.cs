@@ -6,9 +6,14 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,11 +22,14 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Grafika.Drawing;
 using Grafika.Enums;
 using Grafika.Geometry;
+using Grafika.Ppm;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using Microsoft.Toolkit.Uwp.Helpers;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -87,7 +95,6 @@ namespace Grafika
             Display_DpiChanged(display, null);
             MapCanvas.Focus(FocusState.Programmatic);
             SetTheme();
-            //FitContent();
         }
 
         private void MainPage_OnUnloaded(object sender, RoutedEventArgs e)
@@ -146,11 +153,11 @@ namespace Grafika
             ScrollViewer_ViewChanged(null, null);
         }
 
-        private void FitContent()
+        private void FitContent(int width, int height)
         {
             var currentZoom = MapScrollViewer.ZoomFactor;
-            double scaleX = MapScrollViewer.ActualWidth / MapCanvas.Width;
-            double scaleY = MapScrollViewer.ActualHeight / MapCanvas.Height;
+            double scaleX = MapScrollViewer.ActualWidth / width;
+            double scaleY = MapScrollViewer.ActualHeight / height;
 
             var newZoom = (float)(currentZoom * Math.Min(scaleX, scaleY));
 
@@ -289,7 +296,7 @@ namespace Grafika
 
         private void Pan(Point curContentMousePoint)
         {
-            Vector2 dragOffset = new Vector2((float)curContentMousePoint.X - (float)_mouseStart.X, 
+            Vector2 dragOffset = new Vector2((float)curContentMousePoint.X - (float)_mouseStart.X,
                 (float)curContentMousePoint.Y - (float)_mouseStart.Y);
 
             var dragOffsetX = MapScrollViewer.HorizontalOffset - dragOffset.X * MapController.Instance.Zoom;
@@ -335,7 +342,31 @@ namespace Grafika
             MapController.Instance.MousePosition = new Point(point.X, point.Y);
         }
 
+        #region Load Image Files
+        private async void LoadImageFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            var filePicker = new FileOpenPicker();
+            filePicker.FileTypeFilter.Add(".jpg");
+            filePicker.FileTypeFilter.Add(".jpeg");
+            filePicker.FileTypeFilter.Add(".ppm");
 
-        
+            var result = await filePicker.PickSingleFileAsync();
+            if (result != null)
+            {
+                MapScrollViewer.ChangeView(0, 0, 1);
+                if (result.FileType.Equals(".ppm"))
+                {
+                    var ppm = new PpmFile();
+                    await ppm.ReadPpmFile(result);
+                    _map.CreateImage(ppm);
+                }
+                else
+                {
+                    _map.CreateImage(result);
+                }
+            }
+        }
+
+        #endregion
     }
 }

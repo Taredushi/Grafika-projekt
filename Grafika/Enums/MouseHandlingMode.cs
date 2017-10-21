@@ -14,6 +14,7 @@ namespace Grafika.Enums
         Rectangle,
         Circle,
         Panning,
-        Resize
+        Resize,
+        Delete
     }
 }

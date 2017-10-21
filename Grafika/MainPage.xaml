@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xaml="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d" Loaded="MainPage_OnLoaded" Unloaded="MainPage_OnUnloaded">
 
     <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
@@ -19,6 +20,17 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <controls:Menu>
+            <controls:MenuItem Name="FileMenu"
+                               controls:Menu.InputGestureText="Alt+F"
+                               Header="File">
+                <MenuFlyoutSubItem Text="Wczytaj">
+                    <MenuFlyoutItem Text="Obraz" Click="LoadImageFile_OnClick"/>
+                </MenuFlyoutSubItem>
+                <MenuFlyoutItem Text="Zapisz">
+                </MenuFlyoutItem>
+            </controls:MenuItem>
+        </controls:Menu>
         <CommandBar x:Name="TopToolbarMenu" 
                     Grid.Row="1" 
                     Grid.Column="0" 
@@ -38,6 +50,7 @@
                       46L 46,42.75L 54,50.75L 54,41.75L 58,45.75 Z M 45.75,18L 58,18L 58,30.25L 54,34.25L 54,25.25L 46,33.25L 42.75,30L 50.75,22L 41.75,22L 45.75,18 Z M 18,30.25L 18,
                       18L 30.25,18L 34.25,22L 25.25,22L 33.25,30L 30,33.25L 22,25.25L 22,34.25L 18,30.25 Z "/>
             </AppBarToggleButton>
+
             <AppBarSeparator/>
 
             <AppBarToggleButton x:Name="LineButton"  Label="Linia"  Checked="LineButton_OnChecked">
