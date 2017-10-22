@@ -9,6 +9,7 @@ using Windows.Foundation;
 using Windows.Storage;
 using Grafika.Enums;
 using Grafika.Geometry;
+using Grafika.Helpers;
 using Grafika.Interfaces;
 using Grafika.Ppm;
 using Microsoft.Graphics.Canvas;
@@ -131,7 +132,16 @@ namespace Grafika.Drawing
 
         public void DeleteImage()
         {
+            if (_image == null) return;
+            _image.Dispose();
             _image = null;
+        }
+
+        public async Task SaveImage(int compression, StorageFile file)
+        {
+            if (_image == null) return;
+            var wb = await ImageByteArrayConverter.ByteArrayToImage(_image.ImageBytes, (int)_image.ImageWidth, (int)_image.ImageHeight);
+            await ByteArrayToWritableBitmap.WriteableBitmapToStorageFile(wb, FileFormat.Jpeg, compression, file);
         }
         #endregion
         public void Draw(CanvasDrawingSession session, CanvasVirtualControl device)

@@ -27,7 +27,7 @@
                 <MenuFlyoutSubItem Text="Wczytaj">
                     <MenuFlyoutItem Text="Obraz" Click="LoadImageFile_OnClick"/>
                 </MenuFlyoutSubItem>
-                <MenuFlyoutItem Text="Zapisz">
+                <MenuFlyoutItem Text="Zapisz" Click="SaveImageFile_OnClick">
                 </MenuFlyoutItem>
             </controls:MenuItem>
         </controls:Menu>

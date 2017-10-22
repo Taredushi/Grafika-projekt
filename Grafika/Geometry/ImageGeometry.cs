@@ -19,9 +19,9 @@ namespace Grafika.Geometry
     public class ImageGeometry
     {
         private StorageFile _sourceFile;
-        private uint _imageWidth;
-        private uint _imageHeight;
-        private byte[] _imageBytes;
+        public uint ImageWidth { get; private set; }
+        public uint ImageHeight { get; private set; }
+        public byte[] ImageBytes { get; private set; }
         private CanvasBitmap _bitmap;
 
         public ImageGeometry(StorageFile file)
@@ -32,27 +32,33 @@ namespace Grafika.Geometry
 
         public ImageGeometry(PpmFile file)
         {
-            _imageWidth = (uint)file.Width;
-            _imageHeight = (uint)file.Height;
-            _imageBytes = file.ByteArray;
+            ImageWidth = (uint)file.Width;
+            ImageHeight = (uint)file.Height;
+            ImageBytes = file.ByteArray;
         }
 
         private async void Initialize()
         {
             var prop = await _sourceFile.Properties.GetImagePropertiesAsync();
-            _imageWidth = prop.Width;
-            _imageHeight = prop.Height;
-            _imageBytes = await ImageByteArrayConverter.ScaledImageToByteArray(_sourceFile, _imageWidth, _imageHeight);
+            ImageWidth = prop.Width;
+            ImageHeight = prop.Height;
+            ImageBytes = await ImageByteArrayConverter.ScaledImageToByteArray(_sourceFile, ImageWidth, ImageHeight);
         }
 
         public void Draw(CanvasDrawingSession session, CanvasVirtualControl device)
         {
-            if (_bitmap == null)
+            if (_bitmap == null && ImageWidth != 0 && ImageHeight != 0 && (ImageBytes != null && ImageBytes.Length > 0))
             {
-                _bitmap = CanvasBitmap.CreateFromBytes(device, _imageBytes, (int)_imageWidth, (int)_imageHeight, DirectXPixelFormat.B8G8R8X8UIntNormalized);
+                _bitmap = CanvasBitmap.CreateFromBytes(device, ImageBytes, (int)ImageWidth, (int)ImageHeight, DirectXPixelFormat.B8G8R8X8UIntNormalized);
             }
+            if (_bitmap == null) return;
+            session.DrawImage(_bitmap, new Rect(0, 0, ImageWidth, ImageHeight));
+        }
 
-            session.DrawImage(_bitmap, new Rect(0, 0, _imageWidth, _imageHeight));
+        public void Dispose()
+        {
+            _bitmap = null;
+            ImageBytes = null;
         }
     }
 }

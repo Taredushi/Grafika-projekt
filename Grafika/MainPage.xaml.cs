@@ -342,7 +342,7 @@ namespace Grafika
             MapController.Instance.MousePosition = new Point(point.X, point.Y);
         }
 
-        #region Load Image Files
+        #region Load/Save Image Files
         private async void LoadImageFile_OnClick(object sender, RoutedEventArgs e)
         {
             var filePicker = new FileOpenPicker();
@@ -353,6 +353,7 @@ namespace Grafika
             var result = await filePicker.PickSingleFileAsync();
             if (result != null)
             {
+                _map.DeleteImage();
                 MapScrollViewer.ChangeView(0, 0, 1);
                 if (result.FileType.Equals(".ppm"))
                 {
@@ -364,6 +365,38 @@ namespace Grafika
                 {
                     _map.CreateImage(result);
                 }
+            }
+        }
+
+        private async void SaveImageFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            var result = await InputTextDialogAsync("Stopień kompresji");
+            if (result.Equals("Cancel")) return;
+            var filePicker = new FileSavePicker();
+            filePicker.FileTypeChoices.Add("Image", new List<string>() { ".jpeg" });
+            var name = await filePicker.PickSaveFileAsync();
+            await _map.SaveImage(Int32.Parse(result), name);
+        }
+
+        private async Task<string> InputTextDialogAsync(string title)
+        {
+            TextBox inputTextBox = new TextBox();
+            inputTextBox.AcceptsReturn = false;
+            inputTextBox.Height = 32;
+            inputTextBox.Text = "50";
+            ContentDialog dialog = new ContentDialog();
+            dialog.Content = inputTextBox;
+            dialog.Title = title;
+            dialog.IsSecondaryButtonEnabled = true;
+            dialog.PrimaryButtonText = "Ok";
+            dialog.SecondaryButtonText = "Cancel";
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                return inputTextBox.Text;
+            }
+            else
+            {
+                return "Cancel";
             }
         }
 

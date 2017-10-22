@@ -102,6 +102,7 @@
     <Compile Include="Geometry\Geometry.cs" />
     <Compile Include="Geometry\ImageGeometry.cs" />
     <Compile Include="Geometry\TemporaryGeometry.cs" />
+    <Compile Include="Helpers\ByteArrayToWritableBitmap.cs" />
     <Compile Include="Helpers\FindPointCloseToPosition.cs" />
     <Compile Include="Helpers\GetSegmentLength.cs" />
     <Compile Include="Helpers\ImageByteArrayConverter.cs" />

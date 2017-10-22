@@ -49,18 +49,12 @@ namespace Grafika.Helpers
 
         public static async Task<WriteableBitmap> ByteArrayToImage(byte[] bytes, int width, int height)
         {
-            using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+            var image = new WriteableBitmap(width, height);
+            using (Stream stream = image.PixelBuffer.AsStream())
             {
-                using (DataWriter writer = new DataWriter(stream.GetOutputStreamAt(0)))
-                {
-                    writer.WriteBytes(bytes);
-                    await writer.StoreAsync();
-                }
-                var image = new WriteableBitmap(width, height);
-                await image.SetSourceAsync(stream);
-
-                return image;
+                await stream.WriteAsync(bytes, 0, bytes.Length);
             }
+            return image;
         }
 
         public static async Task<byte[]> WritableBitmapToByteArray(WriteableBitmap wb)

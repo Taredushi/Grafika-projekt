@@ -28,23 +28,6 @@ namespace Grafika.Ppm
 
         public async Task ReadPpmFile(StorageFile file)
         {
-            //using (FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read))
-            //{
-            //    using (BinaryReader reader = new BinaryReader(stream.AsStream()))
-            //    {
-            //        var format = reader.ReadBytes(2);
-            //        Format = ((char)format[0]).ToString() + ((char)format[1]);
-            //        if (Format.Equals("P3"))
-            //        {
-            //            ReadTextImage1(stream.AsStream());
-            //        }
-            //        else if (Format.Equals("P6"))
-            //        {
-            //            ReadBinaryImage(reader);
-            //        }
-            //    }
-            //}
-
             using (FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read))
             {
                 using (BinaryReader reader = new BinaryReader(stream.AsStream()))
@@ -53,7 +36,7 @@ namespace Grafika.Ppm
                     Format = ((char)format[0]).ToString() + ((char)format[1]);
                     if (Format.Equals("P3"))
                     {
-                        ReadTextImage2(stream.AsStream());
+                        ReadTextImage1(stream.AsStream());
                     }
                     else if (Format.Equals("P6"))
                     {
@@ -68,15 +51,6 @@ namespace Grafika.Ppm
             {
                 reader.ReadLine();
                 ByteArray = ReadAllNumbers(reader);
-            }
-        }
-
-        private void ReadTextImage2(Stream stream)
-        {
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                reader.ReadLine();
-                ByteArray = ReadAllNumbers2(reader);
             }
         }
 
@@ -149,76 +123,6 @@ namespace Grafika.Ppm
             return array;
         }
 
-        private byte[] ReadAllNumbers2(StreamReader reader)
-        {
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-
-            var text = reader.ReadToEnd();
-            var list = text.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            text = null;
-            for (int i = list.Count - 1; i >= 0; i--)
-            {
-                if (!list[i].Contains("#")) continue;
-                list[i] = list[i].Remove(list[i].IndexOf("#", StringComparison.CurrentCulture));
-                if (string.IsNullOrEmpty(list[i]))
-                {
-                    list.RemoveAt(i);
-                }
-            }
-            var result = string.Join(" ", list);
-            list.Clear();
-            var ta = result.Split(new string[] { "\n", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            result = null;
-            Width = Int32.Parse(ta[0]);
-            Height = Int32.Parse(ta[1]);
-            Depth = Int32.Parse(ta[2]);
-            ta.RemoveAt(0);
-            ta.RemoveAt(0);
-            ta.RemoveAt(0);
-
-            var half = ta.Count / 2;
-            while (half % 3 != 0)
-            {
-                half--;
-            }
-
-            List<byte> firstHalf = new List<byte>();
-            var t1 = Task.Run(() =>
-            {
-                for (int i = 0; i < half; i += 3)
-                {
-                    firstHalf.Add((byte)((Int32.Parse(ta[i + 2]) * 255) / Depth));
-                    firstHalf.Add((byte)((Int32.Parse(ta[i + 1]) * 255) / Depth));
-                    firstHalf.Add((byte)((Int32.Parse(ta[i]) * 255) / Depth));
-                    firstHalf.Add(255);
-                }
-            });
-
-            List<byte> secondHalf = new List<byte>();
-            var t2 = Task.Run(() =>
-            {
-                for (int i = half; i < ta.Count; i+=3)
-                {
-                    secondHalf.Add((byte)((Int32.Parse(ta[i + 2]) * 255) / Depth));
-                    secondHalf.Add((byte)((Int32.Parse(ta[i + 1]) * 255) / Depth));
-                    secondHalf.Add((byte)((Int32.Parse(ta[i]) * 255) / Depth));
-                    secondHalf.Add(255);
-                }
-            });
-
-            Task.WaitAll(new Task[] { t1, t2 });
-
-            var newList = new List<byte>();
-            newList.AddRange(firstHalf);
-            firstHalf.Clear();
-            newList.AddRange(secondHalf);
-            secondHalf.Clear();
-            timer.Stop();
-            Debug.WriteLine("druga " + timer.Elapsed);
-
-            return newList.ToArray();
-        }
 
         private void ReadBinaryImage(BinaryReader reader)
         {
