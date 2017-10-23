@@ -52,7 +52,7 @@ namespace Grafika.Geometry
                 _bitmap = CanvasBitmap.CreateFromBytes(device, ImageBytes, (int)ImageWidth, (int)ImageHeight, DirectXPixelFormat.B8G8R8X8UIntNormalized);
             }
             if (_bitmap == null) return;
-            session.DrawImage(_bitmap, new Rect(0, 0, ImageWidth, ImageHeight));
+            session.DrawImage(_bitmap, new Rect(0, 0, ImageWidth, ImageHeight), new Rect(0, 0, ImageWidth, ImageHeight), 100, CanvasImageInterpolation.NearestNeighbor);
         }
 
         public void Dispose()
