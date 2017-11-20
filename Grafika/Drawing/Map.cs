@@ -137,6 +137,65 @@ namespace Grafika.Drawing
             _image = null;
         }
 
+        public void PerformPointOperation(PointOperations operation, decimal value)
+        {
+            if (_image == null) return;
+            switch (operation)
+            {
+                case PointOperations.Add:
+                    _image.AddValue(value);
+                    break;
+                case PointOperations.Substract:
+                    _image.SubstractValue(value);
+                    break;
+                case PointOperations.Divide:
+                    _image.DivideValue(value);
+                    break;
+                case PointOperations.Multiply:
+                    _image.MultiplyValue(value);
+                    break;
+            }
+        }
+
+        public void PerformLut(byte[] array)
+        {
+            _image.LUT(array);
+        }
+
+        public void AverageGrayscale()
+        {
+            _image.AverageGrayscale();
+        }
+
+        public void LuminocityGrayscale()
+        {
+            _image.LuminocityGrayscale();
+        }
+
+        public void Filter(Filters filter)
+        {
+            switch (filter)
+            {
+                case Filters.Sharpening:
+                    _image.SharpeningFilter();
+                    break;
+                case Filters.Median:
+                    _image.MedianFilter();
+                    break;
+                case Filters.Gauss:
+                    _image.GaussFilter();
+                    break;
+                case Filters.Sobel:
+                    _image.SobelFilter();
+                    break;
+                case Filters.Smooth:
+                    _image.SmoothFilter();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(filter), filter, null);
+            }
+        }
+
         public async Task SaveImage(int compression, StorageFile file)
         {
             if (_image == null) return;

@@ -5,9 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Grafika3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Loaded="MainWindow_OnLoaded" Unloaded="MainWindow_OnUnloaded" >
+        Title="MainWindow" Height="600" Width="900" Loaded="MainWindow_OnLoaded" Unloaded="MainWindow_OnUnloaded">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <WindowsFormsHost x:Name="Host" Grid.Column="0"/>
 
-        <WindowsFormsHost x:Name="Host" />
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Margin="20">
+            <local:Picker/>
+        </Grid>
     </Grid>
 </Window>

@@ -10,6 +10,11 @@ namespace Grafika3
         private int displayList;
         public Vector3 Rotation = new Vector3();
 
+        public Renderer()
+        {
+            Rotation = new Vector3(30, 30, 0);
+        }
+
         public void Render()
         {
             if (this.displayList <= 0)
@@ -20,88 +25,88 @@ namespace Grafika3
                 GL.Begin(BeginMode.Triangles);
 
                 GL.Color3(1.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, -100.0f);    // Front
+                GL.Vertex3(-70.0f, -70.0f, -70.0f);    // Front
                 GL.Color3(1.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, -100.0f);
+                GL.Vertex3(-70.0f, 70.0f, -70.0f);
                 GL.Color3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, -100.0f);
+                GL.Vertex3(70.0f, 70.0f, -70.0f);
 
                 GL.Color3(1.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, -100.0f);
+                GL.Vertex3(-70.0f, -70.0f, -70.0f);
                 GL.Color3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, -100.0f);
+                GL.Vertex3(70.0f, 70.0f, -70.0f);
                 GL.Color3(1.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, -100.0f);
+                GL.Vertex3(70.0f, -70.0f, -70.0f);
 
                 GL.Color3(0.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, 100.0f);     // BACK
+                GL.Vertex3(-70.0f, -70.0f, 70.0f);     // BACK
                 GL.Color3(0.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, 100.0f);
+                GL.Vertex3(70.0f, 70.0f, 70.0f);
                 GL.Color3(0.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, 100.0f);
+                GL.Vertex3(-70.0f, 70.0f, 70.0f);
 
                 GL.Color3(0.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, 100.0f);
+                GL.Vertex3(-70.0f, -70.0f, 70.0f);
                 GL.Color3(0.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, 100.0f);
+                GL.Vertex3(70.0f, -70.0f, 70.0f);
                 GL.Color3(0.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, 100.0f);
+                GL.Vertex3(70.0f, 70.0f, 70.0f);
 
                 GL.Color3(1.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, -100.0f);     // Top
+                GL.Vertex3(-70.0f, 70.0f, -70.0f);     // Top
                 GL.Color3(0.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, 100.0f);
+                GL.Vertex3(-70.0f, 70.0f, 70.0f);
                 GL.Color3(0.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, 100.0f);
+                GL.Vertex3(70.0f, 70.0f, 70.0f);
 
                 GL.Color3(1.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, -100.0f);
+                GL.Vertex3(-70.0f, 70.0f, -70.0f);
                 GL.Color3(0.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, 100.0f);
+                GL.Vertex3(70.0f, 70.0f, 70.0f);
                 GL.Color3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, -100.0f);
+                GL.Vertex3(70.0f, 70.0f, -70.0f);
 
                 GL.Color3(1.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, -100.0f);    // Botto
+                GL.Vertex3(-70.0f, -70.0f, -70.0f);    // Botto
                 GL.Color3(0.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, 100.0f);
+                GL.Vertex3(70.0f, -70.0f, 70.0f);
                 GL.Color3(0.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, 100.0f);
+                GL.Vertex3(-70.0f, -70.0f, 70.0f);
 
                 GL.Color3(1.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, -100.0f);
+                GL.Vertex3(-70.0f, -70.0f, -70.0f);
                 GL.Color3(1.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, -100.0f);
+                GL.Vertex3(70.0f, -70.0f, -70.0f);
                 GL.Color3(0.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, 100.0f);
+                GL.Vertex3(70.0f, -70.0f, 70.0f);
 
                 GL.Color3(1.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, -100.0f);    // Left
+                GL.Vertex3(-70.0f, -70.0f, -70.0f);    // Left
                 GL.Color3(0.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, 100.0f);
+                GL.Vertex3(-70.0f, -70.0f, 70.0f);
                 GL.Color3(0.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, 100.0f);
+                GL.Vertex3(-70.0f, 70.0f, 70.0f);
 
                 GL.Color3(1.0f, 0.0f, 0.0f);
-                GL.Vertex3(-100.0f, -100.0f, -100.0f);
+                GL.Vertex3(-70.0f, -70.0f, -70.0f);
                 GL.Color3(0.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, 100.0f);
+                GL.Vertex3(-70.0f, 70.0f, 70.0f);
                 GL.Color3(1.0f, 0.0f, 1.0f);
-                GL.Vertex3(-100.0f, 100.0f, -100.0f);
+                GL.Vertex3(-70.0f, 70.0f, -70.0f);
 
                 GL.Color3(1.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, -100.0f);     // Right
+                GL.Vertex3(70.0f, -70.0f, -70.0f);     // Right
                 GL.Color3(0.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, 100.0f);
+                GL.Vertex3(70.0f, 70.0f, 70.0f);
                 GL.Color3(0.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, 100.0f);
+                GL.Vertex3(70.0f, -70.0f, 70.0f);
 
                 GL.Color3(1.0f, 1.0f, 0.0f);
-                GL.Vertex3(100.0f, -100.0f, -100.0f);
+                GL.Vertex3(70.0f, -70.0f, -70.0f);
                 GL.Color3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, -100.0f);
+                GL.Vertex3(70.0f, 70.0f, -70.0f);
                 GL.Color3(0.0f, 1.0f, 1.0f);
-                GL.Vertex3(100.0f, 100.0f, 100.0f);
+                GL.Vertex3(70.0f, 70.0f, 70.0f);
 
                 GL.End();
 

@@ -31,7 +31,18 @@
                 </MenuFlyoutItem>
             </controls:MenuItem>
         </controls:Menu>
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="PunktoweButton" Content="Przekształcenia punktowe" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="PunktoweButton_OnClick"/>
+            <Button x:Name="GrayscaleButton" Content="Szarość (Average)" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="GrayscaleButton_OnClick"/>
+            <Button x:Name="Grayscale1Button" Content="Szarość (Luminocity)" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="GrayscaleButton1_OnClick"/>
+            <Button x:Name="SharpeningButton" Content="Sharpening" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="SharpeningButton_OnClick"/>
+            <Button x:Name="MedianButton" Content="Median" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="MedianButton_OnClick"/>
+            <Button x:Name="GaussButton" Content="Gauss" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="GaussButton_OnClick"/>
+            <Button x:Name="SobelButton" Content="Sobel" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="SobelButton_OnClick"/>
+            <Button x:Name="SmoothButton" Content="Smooth" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Click="SmoothButton_OnClick"/>
+        </StackPanel>
         <CommandBar x:Name="TopToolbarMenu" 
+                    Visibility="Collapsed"
                     Grid.Row="1" 
                     Grid.Column="0" 
                     Grid.ColumnSpan="2" 
@@ -75,6 +86,7 @@
         </CommandBar>
 
         <StackPanel x:Name="GeometrySizePanel" 
+                    Visibility="Collapsed"
                     Orientation="Horizontal"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
@@ -84,6 +96,17 @@
             <TextBlock Text="Szerokość: " Margin="5" VerticalAlignment="Center"/>
             <TextBox x:Name="GeometryWidth" Margin="5"/>
             <Button x:Name="AssignSizeButton" Margin="50,5" Content="OK" Width="100" Click="AssignSizeButton_OnClick"></Button>
+        </StackPanel>
+        
+        <!-- Punktowe -->
+        <StackPanel x:Name="PunktoweStackPanel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5" Visibility="Collapsed">
+            <TextBox x:Name="PunktoweValueTextBox" Header="Wartość:" Text="10"/>
+            <Button x:Name="PunktoweAddButton" Content="Dodaj" VerticalAlignment="Stretch" Margin="10,0" Click="PunktoweAddButton_OnClick"/>
+            <Button x:Name="PunktoweSubstrackButton" Content="Odejmij" VerticalAlignment="Stretch" Margin="10,0" Click="PunktoweSubstrackButton_OnClick"/>
+            <Button x:Name="PunktoweMultiplyButton" Content="Pomnóż" VerticalAlignment="Stretch" Margin="10,0" Click="PunktoweMultiplyButton_OnClick"/>
+            <Button x:Name="PunktoweDivideButton" Content="Podziel" VerticalAlignment="Stretch" Margin="10,0" Click="PunktoweDivideButton_OnClick"/>
+            <TextBox x:Name="PunktoweRozjasnianieValueTextBox" Header="Wartość:" Text="10" Margin="20,0,0,0"/>
+            <Button x:Name="BrightnessButton" Content="Rozjaśnianie" VerticalAlignment="Stretch" Margin="10,0" Click="BrightnessButton_OnClick"/>
         </StackPanel>
         
         <!-- MAP -->

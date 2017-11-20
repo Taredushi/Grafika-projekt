@@ -401,5 +401,101 @@ namespace Grafika
         }
 
         #endregion
+
+
+        private void PunktoweButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (PunktoweStackPanel.Visibility == Visibility.Collapsed)
+            {
+                PunktoweStackPanel.Visibility = Visibility.Visible;
+            }
+        }
+
+        #region Point operations
+        private void PunktoweAddButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.PerformPointOperation(PointOperations.Add, decimal.Parse(PunktoweValueTextBox.Text));
+        }
+
+        private void PunktoweSubstrackButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.PerformPointOperation(PointOperations.Substract, decimal.Parse(PunktoweValueTextBox.Text));
+        }
+
+        private void PunktoweMultiplyButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.PerformPointOperation(PointOperations.Multiply, decimal.Parse(PunktoweValueTextBox.Text));
+        }
+
+        private void PunktoweDivideButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.PerformPointOperation(PointOperations.Divide, decimal.Parse(PunktoweValueTextBox.Text));
+        }
+
+        private void BrightnessButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            byte[] LUT = new byte[256];
+            MakeLUTArray(LUT);
+            _map.PerformLut(LUT);
+        }
+
+        private void MakeLUTArray(byte[] LUT)
+        {
+            var b = Int32.Parse(PunktoweRozjasnianieValueTextBox.Text);
+            for (int i = 0; i < 256; i++)
+            {
+                if ((b + i) > 255)
+                {
+                    LUT[i] = 255;
+                }
+                else if ((b + i) < 0)
+                {
+                    LUT[i] = 0;
+                }
+                else
+                {
+                    LUT[i] = (byte)(b + i);
+                }
+            }
+        }
+        #endregion
+
+        #region Grayscale
+        private void GrayscaleButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.AverageGrayscale();
+        }
+
+        private void GrayscaleButton1_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.LuminocityGrayscale();
+        }
+        #endregion
+
+
+        private void SharpeningButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.Filter(Filters.Sharpening);
+        }
+
+        private void MedianButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.Filter(Filters.Median);
+        }
+
+        private void GaussButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.Filter(Filters.Gauss);
+        }
+
+        private void SobelButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.Filter(Filters.Sobel);
+        }
+
+        private void SmoothButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _map.Filter(Filters.Smooth);
+        }
     }
 }

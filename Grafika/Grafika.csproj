@@ -97,8 +97,10 @@
     </Compile>
     <Compile Include="Drawing\Map.cs" />
     <Compile Include="Drawing\MapController.cs" />
+    <Compile Include="Enums\Filters.cs" />
     <Compile Include="Enums\GeometryType.cs" />
     <Compile Include="Enums\MouseHandlingMode.cs" />
+    <Compile Include="Enums\PointOperations.cs" />
     <Compile Include="Geometry\Geometry.cs" />
     <Compile Include="Geometry\ImageGeometry.cs" />
     <Compile Include="Geometry\TemporaryGeometry.cs" />

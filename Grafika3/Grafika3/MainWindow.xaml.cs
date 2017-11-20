@@ -54,16 +54,18 @@ namespace Grafika3
             _glControl.MouseDown += GlControlOnMouseDown;
             _glControl.MouseUp += GlControlOnMouseUp;
             _glControl.MouseMove += GlControlOnMouseMove;
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(10);
-            timer.Tick += this.TimerOnTick;
-            timer.Start();
         }
+        private void MainWindow_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            _form.Dispose();
+        }
+
+        #region GL Control
 
         private void GlControlOnMouseMove(object sender, MouseEventArgs e)
         {
             if (!_mouseCaptured) return;
+
             var current = e.Location;
             float multiplier = 200;
             Vector3 delta = new Vector3();
@@ -84,6 +86,7 @@ namespace Grafika3
                 newVal.Z = input.Z;
             _renderer.Rotation = newVal;
             _activeRotation = newVal;
+            _glControl.Invalidate();
         }
 
         private void GlControlOnMouseUp(object sender, MouseEventArgs e)
@@ -106,12 +109,6 @@ namespace Grafika3
             }
         }
 
-
-        private void MainWindow_OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            _form.Dispose();
-        }
-
         private void GlcontrolOnPaint(object sender, PaintEventArgs e)
         {
             this._glControl.MakeCurrent();
@@ -129,10 +126,7 @@ namespace Grafika3
             this._glControl.SwapBuffers();
         }
 
-        private void TimerOnTick(object sender, EventArgs e)
-        {
-            _glControl.Invalidate();
-        }
+        #endregion
 
     }
 }
